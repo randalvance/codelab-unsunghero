@@ -1,12 +1,12 @@
-summary: How to Write a Codelab
-id: how-to-write-a-codelab
+summary: Composifying Unsung Hero App
+id: compose-unsung-hero
 categories: android
 tags: medium
 status: Published 
-authors: Zarin
-Feedback Link: https://zarin.io
+authors: Randal Cunanan
+Feedback Link: https://github.com/randalvance/codelab-unsunghero/issues
 
-# How to Write a Codelab
+# Composifying Unsung Hero App
 <!-- ------------------------ -->
 ## Overview 
 Duration: 1

@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2020-06-20T23:33:24+08:00",
+  "id": "compose-unsung-hero",
+  "duration": 8,
+  "title": "Composifying Unsung Hero App",
+  "authors": "Randal Cunanan",
+  "summary": "Composifying Unsung Hero App",
+  "source": "compose-unsung-hero.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "android"
+  ],
+  "tags": [
+    "medium"
+  ],
+  "feedback": "https://github.com/randalvance/codelab-unsunghero/issues",
+  "url": "compose-unsung-hero"
+}
