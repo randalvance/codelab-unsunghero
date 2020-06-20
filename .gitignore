@@ -17,6 +17,3 @@ app/js/bundle
 
 /build/
 /dist/
-/codelabs/*
-!/codelabs/*.md
-!/codelabs/assets

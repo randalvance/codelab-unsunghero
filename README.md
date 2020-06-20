@@ -1,6 +1,8 @@
-# Codelabs Site
+# Codelabs - Unsung Hero
 
-A site for hosting codelabs content.
+![Default Workflow](https://github.com/randalvance/codelab-unsunghero/workflows/Default%20Workflow/badge.svg)
+
+[https://codelab-unsunghero.netlify.app](https://codelab-unsunghero.netlify.app)
 
 
 ## Prerequisites
