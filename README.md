@@ -1,15 +1,13 @@
 # Codelabs - Unsung Hero
 
-![Merge to master - Build and Deploy](https://github.com/randalvance/codelab-unsunghero/workflows/Merge%20to%20master%20-%20Build%20and%20Deploy/badge.svg)
-
-[https://codelab-unsunghero.netlify.app](https://codelab-unsunghero.netlify.app)
+[https://codelab-unsung-hero.netlify.app](https://codelab-unsung-hero.netlify.app)
 
 # Run Locally
 
 Run the following command commands
 ```
 npm install
-npm start --codelabs-dir=codelabs
+npm start
 ```
 
 # Convert Markdown to HTML
@@ -27,7 +25,7 @@ claat export path_to_md_file
 # Build and Deploy
 Run the following command
 ```
-npm build --codelabs-dir=codelabs
+npm build
 ```
 It will generate a deployable `dist` folder.
 
