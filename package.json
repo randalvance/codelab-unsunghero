@@ -1,5 +1,9 @@
 {
   "private": true,
+  "scripts": {
+    "start": "gulp serve --codelabs-dir=codelabs",
+    "build": "gulp dist --codelabs-dir=codelabs"
+  },
   "devDependencies": {
     "autoprefixer": "^9.3.1",
     "babel-core": "^6.26.3",
