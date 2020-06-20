@@ -8,15 +8,12 @@ Feedback Link: https://github.com/randalvance/codelab-unsunghero/issues
 
 # Composifying Unsung Hero App
 <!-- ------------------------ -->
-## Overview 
+## Install Android Studio
 Duration: 1
 
-### What You’ll Learn 
-- how to set the amount of time each slide will take to finish 
-- how to include code snippets 
-- how to hyperlink items 
-- how to include images 
-- other stuff
+Download the Canary Build of Android Studio from the following link:
+
+[https://developer.android.com/studio/preview](https://developer.android.com/studio/preview)
 
 <!-- ------------------------ -->
 ## Setting Duration
