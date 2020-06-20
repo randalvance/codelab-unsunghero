@@ -23,7 +23,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm run build --codelabs-dir=codelabs
+    - run: npm run build
     - name: Deploy to Netlify
       uses: jsmrcaga/action-netlify-deploy@master
       with:
