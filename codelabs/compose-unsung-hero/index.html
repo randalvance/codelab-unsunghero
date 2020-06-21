@@ -27,53 +27,120 @@
                   environment="web"
                   feedback-link="https://github.com/randalvance/codelab-unsunghero/issues">
     
-      <google-codelab-step label="Install Android Studio" duration="1">
+      <google-codelab-step label="Preparations" duration="3">
         <p>Download the Canary Build of Android Studio from the following link:</p>
 <p><a href="https://developer.android.com/studio/preview" target="_blank">https://developer.android.com/studio/preview</a></p>
+<p>Install Android Studio Canary. Note that this will be a separate app if you already have the regular Android Studio installed.</p>
+<p>Open the Unsung Hero android project in Android Studio Canary.</p>
+<p>Make sure that we are working on the <code>develop</code> branch.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Setting Duration" duration="2">
-        <p>To indicate how long each slide will take to go through, set the <code>Duration</code> under each Heading 2 (i.e. <code>##</code>) to an integer. The integers refer to minutes. If you set <code>Duration: 4</code> then a particular slide will take 4 minutes to complete.</p>
-<p>The total time will automatically be calculated for you and will be displayed on the codelab once you create it.</p>
+      <google-codelab-step label="Minimum API Level" duration="1">
+        <p>Open <code>build.gradle</code> for the module</p>
+<p>Change the <code>minSdkVersion</code> from <code>16</code> to <code>21</code></p>
+<pre><code>defaultConfig {
+  applicationId &#34;com.example.unsunghero&#34;
+  minSdkVersion 21
+  targetSdkVersion 29
+  versionCode 1
+  versionName &#34;1.0&#34;
 
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Code Snippets" duration="3">
-        <p>To include code snippets you can do a few things.</p>
-<ul>
-<li>Inline highlighting can be done using the tiny tick mark on your keyboard: &#34;`&#34;</li>
-<li>Embedded code</li>
-</ul>
-<h2 is-upgraded>JavaScript</h2>
-<pre><code>{ 
-  key1: &#34;string&#34;, 
-  key2: integer,
-  key3: &#34;string&#34;
+  testInstrumentationRunner &#34;androidx.test.runner.AndroidJUnitRunner&#34;
 }
 </code></pre>
-<h2 is-upgraded>Java</h2>
-<pre><code>for (statement 1; statement 2; statement 3) {
-  // code block to be executed
-}
-</code></pre>
+<p>Sync the project when told so by Android Studio.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Hyperlinking and Embedded Images" duration="1">
-        <h2 is-upgraded>Hyperlinking</h2>
-<p><a href="https://www.youtube.com/user/iamhalsey/playlists" target="_blank">Youtube - Halsey Playlists</a></p>
-<h2 is-upgraded>Images</h2>
-<p class="image-container"><img alt="alt-text-here" src="img/faed7725ea13927e.jpeg"></p>
+      <google-codelab-step label="Setting Up Jetpack Compose" duration="3">
+        <p>Note: If you want to skip this, checkout the branch <code>jetpack-compose-setting-up</code>.</p>
+<p>In your <code>build.gradle</code> of the project, add a varible for Jetpack Compose version to use.</p>
+<pre><code>ext {
+  ...
+  compose_version = &#39;0.1.0-dev13&#39;
+  ...
+}
+</code></pre>
+<p>Add the following dependencies in your <code>build.gradle</code> (module) file.</p>
+<pre><code>implementation &#34;androidx.ui:ui-layout:$compose_version&#34;
+implementation &#34;androidx.ui:ui-material:$compose_version&#34;
+implementation &#34;androidx.ui:ui-tooling:$compose_version&#34;
+implementation &#34;androidx.ui:ui-livedata:$compose_version&#34;
+</code></pre>
+<p>Inside <code>android</code> block of you <code>build.gradle</code> (module) file, add the following block:</p>
+<pre><code>  buildFeatures {
+      compose true
+  }
+</code></pre>
+<p>Sync the project when told so by Android Studio.</p>
+<h2 is-upgraded>Delete Fragment-Related Files</h2>
+<p>I am receiving an error when building the project, specifically in the code generation phase. It seems that Fragments and Android Compose does not currently play well together. Since we are not needing the fragments anymore and will do all the UI via Compose, we can delete the following files:</p>
+<ol type="1">
+<li><code>NominationFragment.kt</code></li>
+<li><code>PlaceholderFragment.kt</code></li>
+<li><code>SectionsPageAdapter.kt</code></li>
+<li><code>FragmentModule</code></li>
+</ol>
+<p>After the deletion, modify <code>ApplicationComponent.kt</code> and remove the line</p>
+<pre><code>    FragmentModule::class,
+</code></pre>
+<p>In <code>NominationActivity.kt</code>, comment out the lines</p>
+<pre><code>    binding = DataBindingUtil.setContentView(this, R.layout.activity_nomination)
+    binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
+    binding.tabs.setupWithViewPager(binding.viewPager)
+</code></pre>
+<p>You should now be able to build the project successfully (you may receive some warnings but we can ignore them).</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Our First Composable" duration="5">
+        <p>If you followed along with the previous step and your project can be built without errors, please proceed. Otherwise, please checkout the branch <code>jetpack-compose-setting-up</code> and build the project.</p>
+<p>In this step, we will create a simple Composable.</p>
+<p>Add a new class named <code>UnsungHeroApp</code> inside the <code>view</code> package.</p>
+<pre><code>package com.zuhlke.unsunghero.view
+
+import androidx.compose.Composable
+import androidx.ui.foundation.Text
+
+@Composable
+fun UnsungHeroApp() {
+    Text(&#34;Hello World!&#34;)
+}
+</code></pre>
+<p>In <code>NominationActivity.kt</code>, replace the code with the following:</p>
+<pre><code>package com.zuhlke.unsunghero.view.nomination
+
+import android.os.Bundle
+import androidx.ui.core.setContent
+import com.zuhlke.unsunghero.databinding.ActivityNominationBinding
+import com.zuhlke.unsunghero.view.UnsungHeroApp
+import com.zuhlke.unsunghero.view.commons.BaseActivity
+
+class NominationActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityNominationBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent { 
+            UnsungHeroApp()
+        }
+    }
+}
+</code></pre>
+<p>Build the project and run the app. You should now see the app showing the first composable.</p>
+<p class="image-container"><img alt="alt-text-here" src="img/ec00c10b681bdacf.png"></p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Other Stuff" duration="1">
-        <p>Checkout the official documentation here: <a href="https://github.com/googlecodelabs/tools/blob/master/FORMAT-GUIDE.md" target="_blank">Codelab Formatting Guide</a></p>
+        <h2 is-upgraded>Resources</h2>
+<p>Checkout the official documentation here: <a href="https://github.com/googlecodelabs/tools/blob/master/FORMAT-GUIDE.md" target="_blank">Codelab Formatting Guide</a></p>
 
 
       </google-codelab-step>
