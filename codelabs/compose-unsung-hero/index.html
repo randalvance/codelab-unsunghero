@@ -133,14 +133,592 @@ class NominationActivity : BaseActivity() {
 }
 </code></pre>
 <p>Build the project and run the app. You should now see the app showing the first composable.</p>
-<p class="image-container"><img alt="alt-text-here" src="img/ec00c10b681bdacf.png"></p>
+<p class="image-container"><img alt="Composable Hello World" src="img/ec00c10b681bdacf.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Other Stuff" duration="1">
-        <h2 is-upgraded>Resources</h2>
-<p>Checkout the official documentation here: <a href="https://github.com/googlecodelabs/tools/blob/master/FORMAT-GUIDE.md" target="_blank">Codelab Formatting Guide</a></p>
+      <google-codelab-step label="Preview Feature" duration="3">
+        <p>We can preview the composed UI by creating a dummy composable annotated with <code>@Preview</code> annotation. In the file <code>UnsungHeroApp.kt</code> where we defined the <code>UnsungHeroApp</code> composable, add another composable:</p>
+<pre><code>import androidx.ui.tooling.preview.Preview
+...
+
+@Preview
+@Composable
+fun UnsungHeroAppPreview() {
+    UnsungHeroApp()
+}
+</code></pre>
+<p>The moment you add it, a preview of the UI will be shown to you. Be sure that the editor is set to Split mode. Before you can preview it, you need to build the project first.</p>
+<p>Note that if the preview still doesn&#39;t show, try closing and reopening the file (remember, we are working on a developer preview version).</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Material Theme" duration="3">
+        <p>Let&#39;s begin building the actual UI for Unsung Hero app. The first thing we need to add is a Tabs Control with 2 tabs, Votes and Nominations.</p>
+<p>Fortunately, Jetpack Compose provides some composables out of the box. These composables are packaged in <code>androidx.ui.material</code> which we already included in our gradle file.</p>
+<p>For a full list of available material composables we can use, refer to the following link: <a href="https://developer.android.com/reference/kotlin/androidx/ui/material/package-summary" target="_blank">https://developer.android.com/reference/kotlin/androidx/ui/material/package-summary</a></p>
+<p>Looking at the list of composables in the documentation above, we can use a <code>TabRow</code> to display tabs. However, when using any material composable, we need to wrap the composables inside the <code>MaterialTheme</code> composable.</p>
+<p>Wrap the contents of <code>UnsungHeroApp</code> with <code>MaterialTheme</code> composable.</p>
+<pre><code>import androidx.ui.material.*
+...
+
+@Composable
+fun UnsungHeroApp() {
+    MaterialTheme() {
+        Text(&#34;Hello World!&#34;)
+    }
+}
+</code></pre>
+<p>Note that I imported <code>import androidx.ui.material.*</code> so we can use all material composables without importing them one by one.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating the Scaffold" duration="3">
+        <p>Modify the code to add the <code>Scaffold</code> composable.</p>
+<pre><code>@Composable
+fun UnsungHeroApp() {
+    MaterialTheme() {
+        Scaffold(
+            topAppBar = {
+                TopAppBar(
+                    title = { Text(text = &#34;Unsung Hero&#34;) }
+                )
+            },
+            bodyContent = {
+                Text(&#34;Hello World!&#34;)
+            }
+        )
+    }
+}
+</code></pre>
+<p>If you run the app, you will notice that we now have 2 app bars which look weird. Go to the android manifest and change the theme to <code>AppTheme.NoActionBar</code></p>
+<pre><code>&lt;application
+    ...
+    android:theme=&#34;@style/AppTheme.NoActionBar&#34;
+    ...
+    &gt;
+    ...
+&lt;/application&gt;
+</code></pre>
+<p>Our app should now look like the following when you run it.</p>
+<p class="image-container"><img alt="Scaffold Done" src="img/bd0d7fcba048fc66.png"></p>
+<p>Don&#39;t worry about the color mismatch, we will fix that next.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Applying the Theme" duration="3">
+        <p>We will seperate any theming logic in another composable. Under the <code>view</code> package, create a new file <code>AppTheme.kt</code>.</p>
+<pre><code>package com.zuhlke.unsunghero.view
+
+import androidx.compose.Composable
+import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.graphics.Color
+import androidx.ui.material.*
+import androidx.ui.text.TextStyle
+import androidx.ui.text.font.FontFamily
+import androidx.ui.text.font.FontWeight
+import androidx.ui.unit.sp
+import androidx.ui.unit.dp
+
+private val LightColorPalette = lightColorPalette(
+    primary = Color(0xFF03A9F4),
+    primaryVariant = Color(0xFF67DAFF),
+    secondary = Color(0xFFFFEB3B)
+)
+
+val shapes = Shapes(
+    small = RoundedCornerShape(4.dp),
+    medium = RoundedCornerShape(4.dp),
+    large = RoundedCornerShape(0.dp)
+)
+
+val typography = Typography(
+    body1 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    )
+)
+
+@Composable
+fun AppTheme(content: @Composable() () -&gt; Unit) {
+    MaterialTheme(
+        colors = LightColorPalette,
+        typography = typography,
+        shapes = shapes,
+        content = content
+    )
+}
+</code></pre>
+<p>Back to the <code>UnsungHeroApp</code> composable, replace <code>MaterialTheme</code> with the <code>AppTheme</code> we just created.</p>
+<pre><code>@Composable
+fun UnsungHeroApp() {
+    AppTheme {
+        Scaffold(
+            topAppBar = {
+                TopAppBar(
+                    title = { Text(text = &#34;Unsung Hero&#34;) }
+                )
+            },
+            bodyContent = {
+                Text(&#34;Hello World!&#34;)
+            }
+        )
+    }
+}
+</code></pre>
+<p>It should now look like the following:</p>
+<p class="image-container"><img alt="Theme Done" src="img/63a96cf14b970f7b.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Adding the TabRow" duration="3">
+        <p>Let&#39;s go back to <code>UnsungHeroApp.kt</code>. Inside this file, we can add an enum for the Sections/Tabs.</p>
+<pre><code>private enum class Sections(val title: String) {
+    Votes(&#34;Votes&#34;),
+    Nominations(&#34;Nominations&#34;)
+}
+</code></pre>
+<p>We will add the <code>TabRow</code> composable inside the body property of the <code>Scaffold</code>.</p>
+<pre><code>@Composable
+fun UnsungHeroApp() {
+    AppTheme {
+        Scaffold(
+            topAppBar = {
+                TopAppBar(
+                    title = { Text(text = &#34;Unsung Hero&#34;) }
+                )
+            },
+            bodyContent = {
+                val (currentSection, setCurrentSection) = state { Sections.Votes }
+                val sectionTitles = Sections.values().map { it.title }
+
+                TabRow(
+                    items = sectionTitles,
+                    selectedIndex = currentSection.ordinal
+                ) { index, title -&gt;
+                    Tab(
+                        text = { Text(title) },
+                        selected = currentSection.ordinal == index,
+                        onSelected = {
+                            setCurrentSection(Sections.values()[index])
+                        }
+                    )
+                }
+            }
+        )
+    }
+}
+</code></pre>
+<p>It should now look like the following:</p>
+<p class="image-container"><img alt="TabRows done" src="img/520f705f240f8d8e.png"></p>
+<h2 is-upgraded>Changing the Tab Indicator Color</h2>
+<p>Currently, the indicator of the TabRow is not using the accent color. As of this writing, there is no property to set it directly. Fortunately, we can pass a composable that we can customize however we want. Modify the code to pass a composable function to <code>indicatorContainer</code>.</p>
+<pre><code>TabRow(
+    items = sectionTitles,
+    selectedIndex = currentSection.ordinal,
+    indicatorContainer = { tabPositions -&gt;
+        TabRow.IndicatorContainer(tabPositions, currentSection.ordinal) {
+            TabRow.Indicator(
+                color = MaterialTheme.colors.secondary
+            )
+        }
+    }
+)
+</code></pre>
+<p>We provided a color from <code>MaterialTheme.colors</code> and the <code>secondary</code> color corresponds to the accent color. Run the app and the indicator should now be using the secondary color.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Refactor UnsungHeroApp Composable" duration="3">
+        <p>The code for the <code>UnsungHeroApp</code> composable is starting to get unmanageable. Composable codes are written in pure Kotlin, so we can use the built-in Kotlin tooling of Android Studio to do some refactoring.</p>
+<p>Highlight the entire content of the <code>Scaffold</code>&#39;s body (the value assigned for the <code>bodyContent</code> starting from <code>{</code> to <code>}</code>). Right-click, choose Refactor, then Function....</p>
+<p>A dialog will be shown where you can specify the function name. Name it <code>BodyContent</code> and click OK. The code should now look like this:</p>
+<pre><code>@Composable
+fun UnsungHeroApp() {
+    AppTheme {
+        Scaffold(
+            topAppBar = {
+                TopAppBar(
+                    title = { Text(text = &#34;Unsung Hero&#34;) }
+                )
+            },
+            bodyContent = {
+                BodyContent()
+            }
+        )
+    }
+}
+
+@Composable
+private fun BodyContent() {
+    val (currentSection, setCurrentSection) = state { Sections.Votes }
+    val sectionTitles = Sections.values().map { it.title }
+
+    TabRow(
+        items = sectionTitles,
+        selectedIndex = currentSection.ordinal,
+        indicatorContainer = { tabPositions -&gt;
+            TabRow.IndicatorContainer(tabPositions, currentSection.ordinal) {
+                TabRow.Indicator(
+                    color = MaterialTheme.colors.secondary
+                )
+            }
+        }
+    ) { index, title -&gt;
+        Tab(
+            text = { Text(title) },
+            selected = currentSection.ordinal == index,
+            onSelected = {
+                setCurrentSection(Sections.values()[index])
+            }
+        )
+    }
+}
+</code></pre>
+<p>The <code>UnsungHeroApp</code> is now much smaller and easier to read.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Add the Sections" duration="2">
+        <p>We will create placeholder sections for the Votes section and the Nominations section.</p>
+<p>Under <code>view</code> package, add 2 new files, <code>VotesSection.kt</code> and <code>NominationsSection.kt</code>. They both define new a new composable. We can provide a simple <code>Text</code> composable as content for now.</p>
+<p><strong>VotesSection.kt</strong></p>
+<pre><code>package com.zuhlke.unsunghero.view
+
+import androidx.compose.Composable
+import androidx.ui.foundation.Text
+
+@Composable
+fun VotesSection() {
+    Text(&#34;Votes Section&#34;)
+}
+</code></pre>
+<p><strong>NominationsSection.kt</strong></p>
+<pre><code>package com.zuhlke.unsunghero.view
+
+import androidx.compose.Composable
+import androidx.ui.foundation.Text
+
+@Composable
+fun NominationsSection() {
+    Text(&#34;Nominations Section&#34;)
+}
+</code></pre>
+<p>In <code>UnsungHeroApp.kt</code>, wrap the <code>TabRow</code> composable with a <code>Column</code> composable.</p>
+<pre><code>Column {
+    TabRow(
+        ...
+    ) { index, title -&gt;
+        ...
+    }
+}
+</code></pre>
+<p>Right after the closing <code>}</code> of <code>TabRow</code>, add the following code:</p>
+<pre><code>Box {
+    when (currentSection) {
+        Sections.Votes -&gt; {
+            VotesSection()
+        }
+        Sections.Nominations -&gt; {
+            NominationsSection()
+        }
+    }
+}
+</code></pre>
+<p>Run the app and observe that the correct section is shown when you click a tab.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Nomination Card Component" duration="5">
+        <p>Let&#39;s build a card component that will hold a nomination entry. Under <code>view</code> package, create a new file named <code>NotificationCard.kt</code>.</p>
+<pre><code>package com.zuhlke.unsunghero.view
+
+import androidx.compose.Composable
+import androidx.ui.core.Alignment
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.*
+import androidx.ui.foundation.shape.corner.RoundedCornerShape
+import androidx.ui.graphics.Color
+import androidx.ui.layout.*
+import androidx.ui.material.*
+import androidx.ui.res.imageResource
+import androidx.ui.unit.dp
+
+import com.zuhlke.unsunghero.R
+
+@Composable
+fun NominationCard() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        )  {
+            Text(
+                text = &#34;April 2020&#34;,
+                style = MaterialTheme.typography.h1,
+                modifier = Modifier.padding(0.dp, 8.dp)
+            )
+            Divider(
+                thickness = 1.dp,
+                color = Color(0xFFCCCCCC)
+            )
+            Text(
+                text = &#34;Unsung Hero is...&#34;,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(0.dp, 8.dp)
+            )
+            Image(
+                modifier = Modifier
+                    .size(128.dp)
+                    .gravity(Alignment.CenterHorizontally),
+                asset = imageResource(R.drawable.profile_image)
+            )
+            Text(
+                text = &#34;Eu, Sean&#34;,
+                style = MaterialTheme.typography.h2,
+                modifier = Modifier.gravity(Alignment.CenterHorizontally)
+            )
+        }
+    }
+}
+</code></pre>
+<p>We need to define and update the typography in <code>AppTheme.kt</code>.</p>
+<pre><code>val typography = Typography(
+    h1 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp
+    ),
+    h2 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp
+    ),
+    body1 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp
+    )
+)
+</code></pre>
+<p>In the <code>LightColorPalette</code>, set a color to the <code>background</code>.</p>
+<pre><code>private val LightColorPalette = lightColorPalette(
+    primary = Color(0xFF03A9F4),
+    primaryVariant = Color(0xFF67DAFF),
+    secondary = Color(0xFFFFEB3B),
+    background = Color(0xFFCCCCCC)
+)
+</code></pre>
+<p>Also update the shape values.</p>
+<pre><code>val shapes = Shapes(
+    small = RoundedCornerShape(4.dp),
+    medium = RoundedCornerShape(8.dp),
+    large = RoundedCornerShape(12.dp)
+)
+</code></pre>
+<p>Go to <code>NominationsSection.kt</code> and add the new <code>NominationCard</code> composable.</p>
+<pre><code>@Composable
+fun NominationsSection() {
+    NominationCard()
+}
+</code></pre>
+<p>When you run the app and go to the Nominations Tab, you should now see this:</p>
+<p class="image-container"><img alt="Nomination Card Done" src="img/423532ff2d9df95b.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Nomination Card - Passing Arguments" duration="3">
+        <p>The <code>NominationCard</code> composable currently use hardcoded values. This values can be provided instead by the parent who will use this composable. It is easy to define this properties as a composable is really just a function, so we can define some parameters to the function. Modify <code>NominationCard</code> composable to use the following code.</p>
+<pre><code>@Composable
+fun NominationCard(
+    nominationDate: Date,
+    winner: String
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = MaterialTheme.shapes.medium
+    ) {
+        val dateFormat = SimpleDateFormat(&#34;MMMM yyyy&#34;, Locale.US)
+        val nominationDateFormatted = dateFormat.format(nominationDate)
+        
+        Column(
+            modifier = Modifier.padding(16.dp)
+        )  {
+            Text(
+                text = nominationDateFormatted,
+                style = MaterialTheme.typography.h1,
+                modifier = Modifier.padding(0.dp, 8.dp)
+            )
+            Divider(
+                thickness = 1.dp,
+                color = Color(0xFFCCCCCC)
+            )
+            Text(
+                text = &#34;Unsung Hero is...&#34;,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(0.dp, 8.dp)
+            )
+            Image(
+                modifier = Modifier
+                    .size(128.dp)
+                    .gravity(Alignment.CenterHorizontally),
+                asset = imageResource(R.drawable.profile_image)
+            )
+            Text(
+                text = winner,
+                style = MaterialTheme.typography.h2,
+                modifier = Modifier.gravity(Alignment.CenterHorizontally)
+            )
+        }
+    }
+}
+</code></pre>
+<p>Modify <code>NominationsSection</code> to pass dummy arguments to <code>NotificationCard</code>.</p>
+<pre><code>@Composable
+fun NominationsSection() {
+    NominationCard(
+        nominationDate = Date(),
+        winner = &#34;Goh, Clare&#34;
+    )
+}
+</code></pre>
+<p>Run the app, and you should see that it now takes the parameter values.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Loading Nominations from Backend" duration="5">
+        <p>We have arrive at the part were we can finally load data from the backend API. Unsung Hero at it&#39;s current state, is already able to do that by using the <code>NominationsViewModel.pastNominations</code> live data.</p>
+<p>We can simply use this same live data thanks to live data integration support introduced by the recent release of <code>0.1.0-dev13</code>.</p>
+<p>But first, we need to have access to the <code>NominationsViewModel</code>.</p>
+<p>Open <code>NominationActivity</code> and add a new field to load the view model.</p>
+<pre><code>private val viewModel by viewModels&lt;NominationViewModel&gt; { viewModelFactory }
+</code></pre>
+<p>We now need to pass this view model from the top <code>UnsungHeroApp</code> composable, up to the inner <code>NominationSection</code> composable which will use it.</p>
+<p>First, let&#39;s pass the viewModel to the <code>UnsungHeroApp</code>.</p>
+<pre><code>UnsungHeroApp(viewModel)
+</code></pre>
+<p>Open <code>UnsungHeroApp.kt</code> and modify the function signature of the composable to accept <code>NominationViewModel</code>.</p>
+<pre><code>fun UnsungHeroApp(viewModel: NominationViewModel) {
+</code></pre>
+<p>Pass the viewModel to the <code>BodyContent</code></p>
+<pre><code>BodyContent(viewModel)
+</code></pre>
+<p>Modify <code>BodyContent</code> composable so it accepts <code>NominationViewModel</code>.</p>
+<pre><code>private fun BodyContent(viewModel: NominationViewModel) {
+</code></pre>
+<p>Pass the viewModel to the <code>NominationsSection</code></p>
+<pre><code>NominationsSection(viewModel)
+</code></pre>
+<p>Modify <code>NominationsSection</code> composable so it accepts <code>NominationViewModel</code>.</p>
+<pre><code>fun NominationsSection(viewModel: NominationViewModel) {
+</code></pre>
+<p>Finally! We have access to the viewModel within the <code>NominationsSection</code> composable.</p>
+<p>We can subscribe to the <code>pastNominations</code> observable of the <code>NominationViewModel</code> inside <code>NominationsSection</code> by adding the following line of code as the first line in the body of the <code>NominationsSection</code> composable.</p>
+<pre><code>val pastNominations = viewModel.pastNominations.observeAsState()
+</code></pre>
+<p>You need to import <code>import androidx.ui.livedata.observeAsState</code>.</p>
+<p>To test this out, after the line we just wrote, add a <code>Text</code> composable and let&#39;s print out the <code>size</code> property of the nominations list returned by the API.</p>
+<pre><code>Text(pastNominations.value?.size.toString())
+</code></pre>
+<p>When you run the app, you will notice that <code>null</code> is displayed, but we expect it to be a number.</p>
+<p>We will see how to fix this next.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Composable Effects" duration="3">
+        <p>Composable have &#34;effects&#34;, as they are called in other frameworks. Think of this as lifecycle hooks.</p>
+<p>The 3 important ones are:</p>
+<ol type="1">
+<li><code>onActive</code> - Executes once after the Composable is created</li>
+<li><code>onDispose</code> - Executes when the Composable is destroyed</li>
+<li><code>onCommit</code> - Executes when the parameters of the composable was changed</li>
+</ol>
+<p>Given this knowledge, we can invoke the loading of nominations when the <code>NominationsSection</code> was created (ie. when it becomes the active Section being viewed).</p>
+<p>In <code>NominationsSection</code> composable, add the following block anywhere inside the composable&#39;s body.</p>
+<pre><code>onActive {
+    viewModel.fetchPastNominations()
+}
+</code></pre>
+<p>Run the app and navigate to the Nominations section. Observe the text value that should output the count of nominations. After a few seconds, it should now change to the actual count of fetched nominations.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Displaying the Past Nominations" duration="3">
+        <p>Now that we can load the nominations, let&#39;s actually display them!</p>
+<p>In <code>NominationsSection</code>, delete</p>
+<pre><code>Text(pastNominations.value?.size.toString())
+</code></pre>
+<p>Change the call to <code>NominationCard</code> composable to:</p>
+<pre><code>val pastNominationsVal = pastNominations.value;
+if (pastNominationsVal != null) {
+    for (nomination in pastNominationsVal) {
+        NominationCard(
+            nominationDate = nomination.start,
+            winner = nomination.winner?.name ?: &#34;Unknown&#34;
+        )
+    }
+} else {
+    Text(&#34;Loading...&#34;)
+}
+</code></pre>
+<p>Run the app and navigate to Nominations Section. You can now see the nominations.</p>
+<p class="image-container"><img alt="Nominations List Done" src="img/8d1828316e582542.png"></p>
+<p>However, we cannot scroll it currently. Let&#39;s see how we can do that next.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Creating the Nominations List" duration="3">
+        <p>Inside <code>NominationsSection</code> composable, highlight the for loop that displays the nominations card. Do the same steps to refactor them to a separate composable.</p>
+<pre><code>@Composable
+private fun NotificationsList(pastNominationsVal: List&lt;NominationResponse&gt;) {
+    for (nomination in pastNominations) {
+        NominationCard(
+            nominationDate = nomination.start,
+            winner = nomination.winner?.name ?: &#34;Unknown&#34;
+        )
+    }
+}
+</code></pre>
+<p>Change the code to use the <code>AdapterList</code> composable from <code>import androidx.ui.foundation</code>.</p>
+<pre><code>@Composable
+private fun NotificationsList(pastNominations: List&lt;NominationResponse&gt;) {
+    AdapterList(data = pastNominations) {
+        NominationCard(
+            nominationDate = it.start,
+            winner = it.winner?.name ?: &#34;Unknown&#34;
+        )
+    }
+}
+</code></pre>
+<p>Run the app and navigate to Nominations Section. You can now scroll the nominations!</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="CodeLab Complete" duration="1">
+        <p>Thank you for completing this code lab.</p>
+<p>The final code was pushed to <code>jetpack-compose-final</code> branch.</p>
+<p>Enjoy!!</p>
 
 
       </google-codelab-step>
